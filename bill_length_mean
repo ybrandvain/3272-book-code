@@ -1,0 +1,27 @@
+library(dplyr)
+library(ggplot2)
+library(palmerpenguins)
+library(patchwork)
+a <-   ggplot(penguins, aes(x = "all penguins", y = bill_length_mm, group = "x"))+
+  geom_boxplot()+
+  geom_jitter(width = .1,height = 0, size = 2,alpha = .4)+
+  stat_summary(fun = "mean", color = "red",size = 3,alpha = .5)+
+  labs(title = "Mean", subtitle ="")
+
+b <-  penguins %>% 
+    mutate(id = 1:n())%>%
+  ggplot(aes(x = id, y = bill_length_mm))+
+  geom_point()+
+  geom_segment(aes(xend = id, yend = mean(bill_length_mm,na.rm=TRUE)), linewidth = .2)+
+  labs(y = "Bill length (mm)", title = "Data points", subtitle = "Lines connect points to predictions")
+
+
+c <-  penguins %>% 
+    mutate(id = 1:n(),
+           residuals = bill_length_mm - mean(bill_length_mm,na.rm=TRUE) )%>%
+  ggplot(aes(x = id, y = residuals))+
+  geom_point()+
+  labs(y = "Bill length (mm)", title = "Residuals",  subtitle ="")
+
+library(patchwork)
+a + b + c +  plot_layout(widths = c(2,5,5))
