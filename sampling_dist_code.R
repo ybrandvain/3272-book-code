@@ -1,5 +1,6 @@
 # Goal: To generate and visualize the sampling distribution of a test statistic under the null hypothesis
 # using a histogram.
+#The goal of this code is to simulate a null sampling distribution of a test statistic (in this case, the mean of a sample of size 20 from a standard normal distribution) and visualize this distribution using a histogram. This helps to understand what the distribution of the test statistic looks like under the null hypothesis, which is essential for comparison with observed test statistics in hypothesis testing.
 
 # Load the ggplot2 library for data visualization
 library(ggplot2)
