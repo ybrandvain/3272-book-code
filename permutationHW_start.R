@@ -73,6 +73,7 @@ one_penguin_boot %>%
 
 # Build on the code above to find the sex difference in mean body mass across 1000 bootstraps and 
 # quantify uncertainty in our estimate with a standard error and 95 percent confidence interval.
+n_reps <- 1000
 penguin_boot_sexdiff <- replicate(n = n_reps, simplify = FALSE, 
                                   expr = my_penguins %>%
                                     dplyr::select(sex, body_mass_g) %>%
