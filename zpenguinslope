@@ -1,0 +1,43 @@
+library(ggplot2)           # ggplot2 for creating visualizations, 
+library(dplyr)             # dplyr for data manipulation, 
+library(palmerpenguins)    # palmerpenguins for the dataset
+
+
+focal_penguins <- penguins %>%
+  filter(species %in% c("Adelie", "Chinstrap")) %>%   # Keep only Adelie and Chinstrap penguins
+  filter(!is.na(flipper_length_mm + body_mass_g)) %>% # Remove rows with missing values in flipper length or body mass
+  select(species, flipper_length_mm, body_mass_g)     # Select only the species, flipper length, and body mass columns
+
+
+Ztrans <- function(x) {
+  # Z-transform function: standardizes the values by subtracting the mean and dividing by the standard deviation
+  (x - mean(x)) / sd(x)
+}
+
+z_focal_penguins <- focal_penguins %>%
+  group_by(species) %>%            # Group the data by species
+  mutate_all(Ztrans)               # Apply Z transformation to all columns (flipper length and body mass)
+
+
+
+gg_color_hue <- function(n) {
+  # Function to generate a sequence of colors based on the number of groups (n)
+  # This uses a color space that ensures distinct and attractive colors for each group
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+
+ggplot(z_focal_penguins, aes(x = body_mass_g, y = flipper_length_mm, color = species)) +
+  geom_point() +                                   # Plot the standardized body mass vs. flipper length
+  geom_smooth(method = 'lm') +                     # Add a linear regression line for each species
+  scale_color_manual(values = gg_color_hue(3)[1:2], # Manually set the colors for each species using custom hues
+                     guide = guide_legend(reverse = TRUE)) + # Reverse the order of the species in the legend
+  geom_label(data = . %>%
+    group_by(species) %>%                          # For each species, compute the slope of the relationship between body mass and flipper length
+    summarise(slope = cov(body_mass_g, flipper_length_mm) / var(body_mass_g),  # Calculate slope using covariance/variance
+              slope_label = paste(unique(species), "\nslope:", round(slope, digits = 4)),  # Create a label for the slope
+              body_mass_g = 3.7,                   # Set a fixed body mass for label placement
+              flipper_length_mm = max(c(as.numeric(species == "Chinstrap")*2.1, 0.8))), # Set a fixed y-position for label placement (higher for Chinstrap)
+             aes(label = slope_label), size = 6) + # Add the slope label to the plot with a specific font size
+  coord_cartesian(xlim = c(-3, 4.5)) +             # Set the x-axis limits for better control over plot view
+  theme(legend.position = "none")                  # Remove the legend from the plot
