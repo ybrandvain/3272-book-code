@@ -12,9 +12,11 @@ sqrl <- read_csv("https://raw.githubusercontent.com/ybrandvain/biostat/master/da
 sqrl <- mutate(sqrl, ambient_temp = fct_relevel(ambient_temp, "cold", "warm", "hot"))
 
 # Create a scatter plot with jitter to show body temperature by ambient temperature
-ggplot(sqrl, aes(x = ambient_temp, y = body_temp, color = ambient_temp))+
+ggplot(sqrl, aes(x = ambient_temp, y = body_temp, color  = ambient_temp))+
   geom_jitter(height = 0, width = .2, size = 2, alpha = .35, show.legend = FALSE)+
-  # Add error bars representing the mean and confidence limits
   stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = .2, color = "black")+
-  # Manually set the colors for the ambient temperature categories: blue for cold, orange for warm, red for hot
-  scale_color_manual(values = c("blue", "orange", "red"))
+  scale_color_manual(values = c("blue", "orange", "red"))+
+  scale_x_discrete(labels=c("Cold (10°C)","Warm (35°C)","Hot (45°C)"))+
+  theme(axis.title = element_text(size = 15))+
+  theme(axis.text = element_text(size = 12))+
+  labs(x = "Ambient temperature", y = "Body temperature (Degrees Celsius)")
