@@ -14,8 +14,7 @@ ggplot(crab , aes(x= bodyTemperature))+
 ### PLOT 2
 ggplot(crab , aes(x= bodyTemperature))+
     geom_qq()+
-    geom_qq_line()+
-    facet_wrap(~crabType)
+    geom_qq_line()
     
 ### PLOT 3
 lm(bodyTemperature ~ crabType, data = crab) %>%
