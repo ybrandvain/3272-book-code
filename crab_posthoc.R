@@ -2,7 +2,7 @@ library(dplyr)
 library(forcats)
 library(readr)
 library(ggplot2)
-crabs <- read_csv("https://whitlockschluter3e.zoology.ubc.ca/Data/chapter15/chap15q27FiddlerCrabFans.csv")
+crabs <- read_csv("https://raw.githubusercontent.com/ybrandvain/datasets/refs/heads/master/crabs.csv")
 
 crabs <- crabs %>% 
   na.omit()%>%
