@@ -2,7 +2,7 @@ library(readr)
 library(dplyr)
 library(ggplot2)
 library(broom)
-crab <- read_csv("https://whitlockschluter3e.zoology.ubc.ca/Data/chapter15/chap15q27FiddlerCrabFans.csv")
+crab <- read_csv("https://raw.githubusercontent.com/ybrandvain/datasets/refs/heads/master/crabs.csv")
 
 
 ### PLOT 1
